@@ -18,11 +18,11 @@ const INITIAL_POSTS = [
 ];
 
 const categories = [
-  { id: 'care', title: 'Уход за ребёнком', icon: 'Baby', color: 'bg-accent', desc: 'Купание, сон, режим дня' },
-  { id: 'health', title: 'Здоровье', icon: 'HeartPulse', color: 'bg-secondary', desc: 'Прививки, иммунитет, врачи' },
-  { id: 'dev', title: 'Развитие', icon: 'Sparkles', color: 'bg-primary/20', desc: 'Игры, моторика, речь' },
-  { id: 'food', title: 'Питание', icon: 'Apple', color: 'bg-muted', desc: 'Прикорм, меню, рецепты' },
-  { id: 'treat', title: 'Лечение ребёнка', icon: 'Stethoscope', color: 'bg-primary/20', desc: 'Симптомы, лекарства, уход при болезни' },
+  { id: 'care', title: 'Уход за ребёнком', icon: 'Baby', color: 'bg-accent', desc: 'Купание, сон, режим дня', img: 'https://cdn.poehali.dev/projects/707e5f3e-69b7-4eb7-9096-20901dbd833c/files/f78d7e7d-09f7-4853-afac-2073eb651c78.jpg' },
+  { id: 'health', title: 'Здоровье', icon: 'HeartPulse', color: 'bg-secondary', desc: 'Прививки, иммунитет, врачи', img: 'https://cdn.poehali.dev/projects/707e5f3e-69b7-4eb7-9096-20901dbd833c/files/1257ea69-c20f-4158-991e-4b6758307efb.jpg' },
+  { id: 'dev', title: 'Развитие', icon: 'Sparkles', color: 'bg-primary/20', desc: 'Игры, моторика, речь', img: 'https://cdn.poehali.dev/projects/707e5f3e-69b7-4eb7-9096-20901dbd833c/files/a87f0b0f-2232-4ab1-a5f4-1535625fbc96.jpg' },
+  { id: 'food', title: 'Питание', icon: 'Apple', color: 'bg-muted', desc: 'Прикорм, меню, рецепты', img: 'https://cdn.poehali.dev/projects/707e5f3e-69b7-4eb7-9096-20901dbd833c/files/7d015a5d-58bb-469b-9a8c-5af4ecfacd46.jpg' },
+  { id: 'treat', title: 'Лечение ребёнка', icon: 'Stethoscope', color: 'bg-primary/20', desc: 'Симптомы, лекарства, уход при болезни', img: 'https://cdn.poehali.dev/projects/707e5f3e-69b7-4eb7-9096-20901dbd833c/files/06f22d49-8737-4629-9d0b-f2bbd6d5f271.jpg' },
 ];
 
 type Post = { id: number; catId: string; cat: string; title: string; excerpt: string; content: string; author: string; img: string; read: string; date: string };
@@ -311,13 +311,21 @@ export default function Index() {
           {categories.map((c) => {
             const isActive = activeCategory === c.id;
             return (
-              <button key={c.id} onClick={() => handleCategoryClick(c.id)} className={`group text-left bg-card rounded-[2rem] p-7 shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 border-2 ${isActive ? 'border-primary shadow-lg -translate-y-1' : 'border-border/40'}`}>
-                <div className={`w-14 h-14 rounded-2xl ${c.color} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform ${isActive ? 'scale-110' : ''}`}>
-                  <Icon name={c.icon} size={26} className="text-foreground" />
+              <button key={c.id} onClick={() => handleCategoryClick(c.id)} className={`group text-left bg-card rounded-[2rem] overflow-hidden shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 border-2 ${isActive ? 'border-primary shadow-lg -translate-y-1' : 'border-border/40'}`}>
+                <div className="relative overflow-hidden h-40">
+                  <img src={c.img} alt={c.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                  <div className={`absolute top-3 right-3 w-9 h-9 rounded-xl ${c.color} flex items-center justify-center shadow-sm`}>
+                    <Icon name={c.icon} size={18} className="text-foreground" />
+                  </div>
+                  {isActive && (
+                    <span className="absolute top-3 left-3 text-xs font-bold px-2 py-1 rounded-full bg-primary text-primary-foreground">✓ выбрано</span>
+                  )}
                 </div>
-                <h3 className="font-display font-bold text-lg text-foreground">{c.title}</h3>
-                <p className="text-sm text-muted-foreground mt-2">{c.desc}</p>
-                {isActive && <span className="inline-block mt-3 text-xs font-bold text-primary">✓ выбрано</span>}
+                <div className="p-5">
+                  <h3 className="font-display font-bold text-base text-foreground">{c.title}</h3>
+                  <p className="text-xs text-muted-foreground mt-1">{c.desc}</p>
+                </div>
               </button>
             );
           })}
