@@ -16,6 +16,7 @@ const categories = [
 
 const posts = [
   {
+    catId: 'care',
     cat: 'Уход за ребёнком',
     title: 'Как наладить здоровый сон малыша',
     excerpt: 'Простые ритуалы перед сном, которые помогут уложить кроху без слёз и капризов.',
@@ -24,6 +25,7 @@ const posts = [
     date: '20 июня',
   },
   {
+    catId: 'food',
     cat: 'Питание',
     title: 'Первый прикорм: с чего начать',
     excerpt: 'Пошаговый гид по введению новых продуктов и список самых безопасных первых блюд.',
@@ -32,6 +34,7 @@ const posts = [
     date: '18 июня',
   },
   {
+    catId: 'dev',
     cat: 'Развитие',
     title: '10 игр для развития мелкой моторики',
     excerpt: 'Подборка простых занятий из подручных материалов для малышей от года.',
@@ -39,11 +42,40 @@ const posts = [
     read: '4 мин',
     date: '15 июня',
   },
+  {
+    catId: 'health',
+    cat: 'Здоровье',
+    title: 'Прививки по календарю: что важно знать',
+    excerpt: 'Разбираем национальный календарь прививок и отвечаем на частые вопросы мам.',
+    img: HERO_IMG,
+    read: '6 мин',
+    date: '12 июня',
+  },
+  {
+    catId: 'treat',
+    cat: 'Лечение ребёнка',
+    title: 'Температура у малыша: когда вызывать врача',
+    excerpt: 'Чёткие ориентиры для мам: при каких симптомах нужна срочная помощь, а когда можно справиться дома.',
+    img: CARE_IMG,
+    read: '5 мин',
+    date: '10 июня',
+  },
 ];
 
 const Index = () => {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+
+  const handleCategoryClick = (id: string) => {
+    setActiveCategory(prev => prev === id ? null : id);
+    setTimeout(() => {
+      document.getElementById('posts')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+  };
+
+  const filteredPosts = activeCategory ? posts.filter(p => p.catId === activeCategory) : posts;
+  const activeCat = categories.find(c => c.id === activeCategory);
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,7 +95,13 @@ const Index = () => {
           </div>
           <nav className="hidden md:flex items-center gap-7 text-sm font-semibold text-muted-foreground">
             {categories.map((c) => (
-              <a key={c.id} href={`#${c.id}`} className="hover:text-primary transition-colors">{c.title}</a>
+              <button
+                key={c.id}
+                onClick={() => handleCategoryClick(c.id)}
+                className={`hover:text-primary transition-colors ${activeCategory === c.id ? 'text-primary' : ''}`}
+              >
+                {c.title}
+              </button>
             ))}
           </nav>
           <Button className="rounded-full font-semibold shadow-sm" onClick={() => document.getElementById('subscribe')?.scrollIntoView({ behavior: 'smooth' })}>
@@ -87,7 +125,12 @@ const Index = () => {
               <Icon name="PenLine" size={18} className="mr-2" />
               Написать пост
             </Button>
-            <Button size="lg" variant="outline" className="rounded-full font-semibold text-base border-2">
+            <Button
+              size="lg"
+              variant="outline"
+              className="rounded-full font-semibold text-base border-2"
+              onClick={() => document.getElementById('posts')?.scrollIntoView({ behavior: 'smooth' })}
+            >
               Читать советы
             </Button>
           </div>
@@ -101,54 +144,79 @@ const Index = () => {
       {/* Categories */}
       <section className="container py-12">
         <h2 className="font-display font-bold text-3xl text-center text-foreground mb-3">Темы блога</h2>
-        <p className="text-center text-muted-foreground mb-12">Выбирайте то, что близко именно вам</p>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {categories.map((c) => (
-            <a
-              key={c.id}
-              id={c.id}
-              href={`#${c.id}`}
-              className="group bg-card rounded-[2rem] p-7 shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 border border-border/40"
-            >
-              <div className={`w-14 h-14 rounded-2xl ${c.color} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform`}>
-                <Icon name={c.icon} size={26} className="text-foreground" />
-              </div>
-              <h3 className="font-display font-bold text-lg text-foreground">{c.title}</h3>
-              <p className="text-sm text-muted-foreground mt-2">{c.desc}</p>
-            </a>
-          ))}
+        <p className="text-center text-muted-foreground mb-12">Нажмите на тему, чтобы увидеть посты</p>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-6">
+          {categories.map((c) => {
+            const isActive = activeCategory === c.id;
+            return (
+              <button
+                key={c.id}
+                onClick={() => handleCategoryClick(c.id)}
+                className={`group text-left bg-card rounded-[2rem] p-7 shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 border-2 ${isActive ? 'border-primary shadow-lg -translate-y-1' : 'border-border/40'}`}
+              >
+                <div className={`w-14 h-14 rounded-2xl ${c.color} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform ${isActive ? 'scale-110' : ''}`}>
+                  <Icon name={c.icon} size={26} className="text-foreground" />
+                </div>
+                <h3 className="font-display font-bold text-lg text-foreground">{c.title}</h3>
+                <p className="text-sm text-muted-foreground mt-2">{c.desc}</p>
+                {isActive && (
+                  <span className="inline-block mt-3 text-xs font-bold text-primary">
+                    ✓ выбрано
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
       </section>
 
       {/* Posts */}
-      <section className="container py-16">
+      <section id="posts" className="container py-16">
         <div className="flex items-end justify-between mb-10">
           <div>
-            <span className="font-hand text-2xl text-primary">свежее</span>
-            <h2 className="font-display font-bold text-3xl text-foreground">Последние посты</h2>
+            <span className="font-hand text-2xl text-primary">
+              {activeCategory ? activeCat?.title : 'свежее'}
+            </span>
+            <h2 className="font-display font-bold text-3xl text-foreground">
+              {activeCategory ? 'Посты по теме' : 'Последние посты'}
+            </h2>
           </div>
-          <a href="#" className="hidden sm:flex items-center gap-1 text-sm font-semibold text-primary hover:gap-2 transition-all">
-            Все статьи <Icon name="ArrowRight" size={16} />
-          </a>
+          {activeCategory && (
+            <button
+              onClick={() => setActiveCategory(null)}
+              className="flex items-center gap-1 text-sm font-semibold text-muted-foreground hover:text-primary transition-colors"
+            >
+              <Icon name="X" size={16} /> Все темы
+            </button>
+          )}
         </div>
-        <div className="grid md:grid-cols-3 gap-7">
-          {posts.map((p, i) => (
-            <article key={i} className="bg-card rounded-[2rem] overflow-hidden shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 border border-border/40">
-              <div className="overflow-hidden">
-                <img src={p.img} alt={p.title} className="w-full aspect-[4/3] object-cover hover:scale-105 transition-transform duration-500" />
-              </div>
-              <div className="p-6">
-                <span className="inline-block text-xs font-bold px-3 py-1 rounded-full bg-accent text-accent-foreground mb-3">{p.cat}</span>
-                <h3 className="font-display font-bold text-lg text-foreground leading-snug">{p.title}</h3>
-                <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{p.excerpt}</p>
-                <div className="flex items-center gap-4 mt-5 text-xs text-muted-foreground font-semibold">
-                  <span className="flex items-center gap-1"><Icon name="Calendar" size={14} /> {p.date}</span>
-                  <span className="flex items-center gap-1"><Icon name="Clock" size={14} /> {p.read}</span>
+
+        {filteredPosts.length === 0 ? (
+          <div className="text-center py-20 text-muted-foreground">
+            <Icon name="FileX" size={48} className="mx-auto mb-4 opacity-40" />
+            <p className="font-semibold text-lg">В этой теме пока нет постов</p>
+            <p className="text-sm mt-2">Будьте первой — поделитесь своим опытом!</p>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-3 gap-7">
+            {filteredPosts.map((p, i) => (
+              <article key={i} className="bg-card rounded-[2rem] overflow-hidden shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 border border-border/40">
+                <div className="overflow-hidden">
+                  <img src={p.img} alt={p.title} className="w-full aspect-[4/3] object-cover hover:scale-105 transition-transform duration-500" />
                 </div>
-              </div>
-            </article>
-          ))}
-        </div>
+                <div className="p-6">
+                  <span className="inline-block text-xs font-bold px-3 py-1 rounded-full bg-accent text-accent-foreground mb-3">{p.cat}</span>
+                  <h3 className="font-display font-bold text-lg text-foreground leading-snug">{p.title}</h3>
+                  <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{p.excerpt}</p>
+                  <div className="flex items-center gap-4 mt-5 text-xs text-muted-foreground font-semibold">
+                    <span className="flex items-center gap-1"><Icon name="Calendar" size={14} /> {p.date}</span>
+                    <span className="flex items-center gap-1"><Icon name="Clock" size={14} /> {p.read}</span>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Subscribe */}
