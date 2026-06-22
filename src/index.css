@@ -5,10 +5,10 @@
 @layer base {
   :root {
     --background: 35 50% 98%;
-    --foreground: 25 30% 22%;
+    --foreground: 25 40% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 25 30% 22%;
+    --card-foreground: 25 40% 12%;
 
     --popover: 0 0% 100%;
     --popover-foreground: 25 30% 22%;
@@ -20,7 +20,7 @@
     --secondary-foreground: 155 30% 28%;
 
     --muted: 35 35% 94%;
-    --muted-foreground: 25 18% 50%;
+    --muted-foreground: 25 20% 35%;
 
     --accent: 340 55% 90%;
     --accent-foreground: 340 40% 35%;
@@ -98,6 +98,8 @@
   body {
     @apply bg-background text-foreground;
     font-family: "Nunito", sans-serif;
+    font-weight: 600;
+    font-size: 16px;
   }
 }
 
