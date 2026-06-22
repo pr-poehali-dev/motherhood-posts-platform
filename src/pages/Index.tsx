@@ -179,8 +179,8 @@ const AuthModal = ({ onAuth, onClose }: { onAuth: (pwd: string) => void; onClose
 };
 
 export default function Index() {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [posts, setPosts] = useState<Post[]>(INITIAL_POSTS);
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -335,8 +335,8 @@ export default function Index() {
       <section id="posts" className="container py-16">
         <div className="flex items-end justify-between mb-10">
           <div>
-            <span className="font-hand text-2xl text-primary">{activeCategory ? activeCat?.title : 'свежее'}</span>
-            <h2 className="font-display font-bold text-3xl text-foreground">{activeCategory ? 'Посты по теме' : 'Последние посты'}</h2>
+            <span className="font-hand text-4xl text-primary">{activeCategory ? activeCat?.title : 'свежее'}</span>
+            <h2 className="font-display font-bold text-4xl text-foreground">{activeCategory ? 'Посты по теме' : 'Последние посты'}</h2>
           </div>
           {activeCategory && (
             <button onClick={() => setActiveCategory(null)} className="flex items-center gap-1 text-sm font-semibold text-muted-foreground hover:text-primary transition-colors">
@@ -371,7 +371,7 @@ export default function Index() {
                       <span className="flex items-center gap-1"><Icon name="Calendar" size={13} /> {p.date}</span>
                       <span className="flex items-center gap-1"><Icon name="Clock" size={13} /> {p.read}</span>
                     </div>
-                    <span className="text-xs font-bold text-primary flex items-center gap-1 group-hover:gap-2 transition-all">Читать <Icon name="ArrowRight" size={13} /></span>
+                    <span className="text-sm font-bold text-primary flex items-center gap-1 group-hover:gap-2 transition-all">Читать <Icon name="ArrowRight" size={15} /></span>
                   </div>
                 </div>
               </article>
