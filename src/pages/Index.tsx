@@ -284,8 +284,7 @@ export default function Index() {
       <section className="container py-16 md:py-24 grid md:grid-cols-2 gap-12 items-center">
         <div className="animate-fade-in">
           <span className="font-hand text-3xl text-primary">тёплое сообщество мам</span>
-          <h1 className="font-display font-bold text-4xl md:text-6xl leading-tight mt-3 text-foreground">Делитесь опытом материнства</h1>
-          <p className="text-lg text-muted-foreground mt-6 max-w-md leading-relaxed">Советы по уходу, здоровью, развитию и питанию малыша — от мам для мам. Без осуждения, с теплом и заботой.</p>
+          <h1 className="font-display font-bold text-4xl md:text-6xl leading-tight mt-3 text-foreground">Советы по уходу, здоровью, развитию и питанию малыша — от мам для мам. Без осуждения, с теплом и заботой.</h1>
           <div className="flex flex-wrap gap-4 mt-8">
             {isAuthor && (
               <Button size="lg" onClick={handleNewPost} className="rounded-full font-semibold text-base shadow-md hover-scale">
